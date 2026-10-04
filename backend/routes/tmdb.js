@@ -1,43 +1,43 @@
 const express = require('express');
-const config = require('../config');
+const { MEDIA_TYPES } = require('../constants');
 const { requireAuth } = require('../middleware/auth');
-const { AppError } = require('../middleware/errors');
 const {
-  fetchTmdb,
+  fetchMediaDetails,
+  fetchSeasonDetails,
   fetchTmdbImage,
-  normalizeEpisode,
-  normalizeMovieDetails,
   normalizeSearchResult,
-  normalizeTvDetails,
-  validateMediaId,
+  searchTmdb
+} = require('../services/tmdb-client');
+const { parseId } = require('../validation/numbers');
+const {
   validatePage,
-  validatePosterPath
-} = require('../services/tmdbHelper');
-const { validateMediaType } = require('../validation/trackedMediaValidation');
+  validatePosterPath,
+  validateSearchQuery
+} = require('../validation/tmdb-validation');
+const { validateMediaType } = require('../validation/tracked-media-validation');
+
+const DEFAULT_PAGE = 1;
+// Poster paths never change their content, so browsers may keep them for a day.
+const POSTER_CACHE_CONTROL = 'public, max-age=86400';
 
 const router = express.Router();
 
-router.get('/image', async (request, response) => {
-  const posterPath = validatePosterPath(request.query.path);
-  const image = await fetchTmdbImage(posterPath);
+// Public on purpose: guest profiles show posters too.
+router.get('/images', async (request, response) => {
+  const image = await fetchTmdbImage(validatePosterPath(request.query.path));
   response.setHeader('Content-Type', image.contentType);
+  response.setHeader('Cache-Control', POSTER_CACHE_CONTROL);
   response.send(image.body);
 });
 
 router.use(requireAuth);
 
 router.get('/search', async (request, response) => {
-  const query = request.query.query?.trim();
   const mediaType = validateMediaType(request.query.type);
-  const page = request.query.page ?? '1';
+  const query = validateSearchQuery(request.query.query);
+  const page = validatePage(request.query.page ?? DEFAULT_PAGE);
+  const data = await searchTmdb(mediaType, query, page);
 
-  if (!query) {
-    throw new AppError(400, 'VALIDATION_ERROR', 'Search query is required.');
-  }
-
-  validatePage(page);
-
-  const data = await fetchTmdb(`/search/${mediaType}?query=${encodeURIComponent(query)}&page=${page}`, config.TMDB_SEARCH_CACHE_MS);
   response.json({
     data: {
       page: data.page,
@@ -49,31 +49,20 @@ router.get('/search', async (request, response) => {
 });
 
 router.get('/movies/:tmdbId', async (request, response) => {
-  const tmdbId = validateMediaId(request.params.tmdbId);
-  const details = await fetchTmdb(`/movie/${tmdbId}`, config.TMDB_DETAILS_CACHE_MS);
-  response.json({ data: normalizeMovieDetails(details) });
+  const details = await fetchMediaDetails(MEDIA_TYPES.MOVIE, parseId(request.params.tmdbId, 'TMDB ID'));
+  response.json({ data: details });
 });
 
-router.get('/tv/:tmdbId', async (request, response) => {
-  const tmdbId = validateMediaId(request.params.tmdbId);
-  const details = await fetchTmdb(`/tv/${tmdbId}`, config.TMDB_DETAILS_CACHE_MS);
-  response.json({ data: normalizeTvDetails(details) });
+router.get('/tv-shows/:tmdbId', async (request, response) => {
+  const details = await fetchMediaDetails(MEDIA_TYPES.TV, parseId(request.params.tmdbId, 'TMDB ID'));
+  response.json({ data: details });
 });
 
-router.get('/tv/:tmdbId/seasons/:seasonNumber', async (request, response) => {
-  const tmdbId = validateMediaId(request.params.tmdbId);
-  const seasonNumber = validateMediaId(request.params.seasonNumber, 'Season number');
-  const season = await fetchTmdb(
-    `/tv/${tmdbId}/season/${seasonNumber}`,
-    config.TMDB_DETAILS_CACHE_MS
-  );
-  response.json({
-    data: {
-      season_number: season.season_number,
-      name: season.name,
-      episodes: (season.episodes ?? []).map(normalizeEpisode)
-    }
-  });
+router.get('/tv-shows/:tmdbId/seasons/:seasonNumber', async (request, response) => {
+  const tmdbId = parseId(request.params.tmdbId, 'TMDB ID');
+  const seasonNumber = parseId(request.params.seasonNumber, 'Season number');
+  const season = await fetchSeasonDetails(tmdbId, seasonNumber);
+  response.json({ data: season });
 });
 
 module.exports = router;

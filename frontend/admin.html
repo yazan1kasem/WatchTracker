@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
     <title>Nutzerkonten | WatchTrack</title>
     <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="/pageController.js"></script>
+    <script type="module" src="/js/main.js"></script>
   </head>
   <body data-page="admin">
     <div id="topbar-slot"></div>
@@ -38,41 +38,40 @@
             <button class="button button-primary" type="submit">Nutzer anlegen</button>
           </form>
           <p id="admin-user-create-message" class="status-line" aria-live="polite"></p>
-        <form id="admin-filter" class="admin-filter">
-          <label>
-            Benutzername
-            <input id="admin-query" type="search" placeholder="z. B. lena" />
-          </label>
-          <label>
-            Rolle
-            <select id="admin-role">
-              <option value="all">Alle</option>
-              <option value="user">Nutzer</option>
-              <option value="admin">Admin</option>
-            </select>
-          </label>
-          <button class="button button-primary" type="submit">Suchen</button>
-        </form>
-        <p id="admin-user-message" class="status-line" aria-live="polite"></p>
-        <p id="admin-message" class="status-line" aria-live="polite"></p>
-        <div class="admin-table-wrap">
-          <table class="admin-table">
-            <thead>
-              <tr><th>Nutzer</th><th>Rolle</th><th>Aktionen</th></tr>
-            </thead>
-            <tbody id="admin-users"></tbody>
-          </table>
-        </div>
-        <template id="admin-user-template">
-          <tr>
-            <td><strong data-username></strong><span class="admin-id" data-user-id></span></td>
-            <td data-role></td>
-            <td class="row-actions">
-              <button class="button button-secondary button-small" type="button" data-edit>Bearbeiten</button>
-              <button class="text-button danger-link" type="button" data-delete>Löschen</button>
-            </td>
-          </tr>
-        </template>
+          <form id="admin-filter" class="admin-filter">
+            <label>
+              Benutzername
+              <input id="admin-query" type="search" placeholder="z. B. lena" />
+            </label>
+            <label>
+              Rolle
+              <select id="admin-role">
+                <option value="all">Alle</option>
+                <option value="user">Nutzer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+            <button class="button button-primary" type="submit">Suchen</button>
+          </form>
+          <p id="admin-user-message" class="status-line" aria-live="polite"></p>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr><th>Nutzer</th><th>Rolle</th><th>Aktionen</th></tr>
+              </thead>
+              <tbody id="admin-users"></tbody>
+            </table>
+          </div>
+          <template id="admin-user-template">
+            <tr>
+              <td><strong data-username></strong><span class="admin-id" data-user-id></span></td>
+              <td data-role></td>
+              <td class="row-actions">
+                <button class="button button-secondary button-small" type="button" data-edit>Bearbeiten</button>
+                <button class="text-button danger-link" type="button" data-delete>Löschen</button>
+              </td>
+            </tr>
+          </template>
         </section>
 
         <section class="admin-section" aria-labelledby="admin-media-heading">
@@ -88,7 +87,7 @@
               <datalist id="admin-media-user-options"></datalist>
             </label>
             <label>Medientyp
-              <select name="media_type" id="admin-media-type-create">
+              <select name="media_type">
                 <option value="movie">Film</option>
                 <option value="tv">Serie</option>
               </select>
@@ -114,7 +113,7 @@
             <button class="button button-secondary" type="submit">Filter zurücksetzen</button>
           </form>
           <p id="admin-media-message" class="status-line" aria-live="polite"></p>
-          <div class="admin-table-wrap">
+          <div class="table-wrap">
             <table class="admin-table admin-media-table">
               <thead>
                 <tr><th>Nutzer</th><th>Titel</th><th>Fortschritt</th><th>Bewertung</th><th>Profil</th><th>Aktionen</th></tr>
@@ -184,6 +183,5 @@
         </div>
       </form>
     </dialog>
-
   </body>
 </html>

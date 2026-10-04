@@ -22,3 +22,4 @@ postman/WatchTrack.postman_environment.json
 chat.json
 AGENT_PROMPTS.txt
 seed_demo_data.py
+seed-demo-data.py

@@ -1,34 +1,30 @@
 <!doctype html>
 <html lang="de">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
     <title>Konto erstellen | WatchTrack</title>
     <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="/pageController.js"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-</head>
-
-<body data-page="register">
+    <script type="module" src="/js/main.js"></script>
+  </head>
+  <body data-page="register">
     <div id="topbar-slot"></div>
     <main class="page-content">
-        <section class="auth-page">
-            <h1>Konto erstellen</h1>
-            <p class="muted intro-copy">Mit einem Konto bleiben deine Liste und dein Fortschritt gespeichert.</p>
-            <form id="register-form" class="auth-form">
-                <p class="form-alert" data-form-error role="alert" hidden></p>
-                <label>Benutzername<input name="username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+"
-                        autocomplete="username" /></label>
-                <p class="form-hint">3–30 Zeichen: Buchstaben, Zahlen und Unterstrich.</p>
-                <label>Passwort<input name="password" type="password"/></label>
-                <label>Passwort wiederholen<input name="password_confirmation" type="password"/></label>
-                <button class="button button-primary button-wide" type="submit">Konto erstellen</button>
-                <p class="auth-switch">Schon registriert? <a href="/login.html">Anmelden</a></p>
-            </form>
-        </section>
+      <section class="auth-page">
+        <h1>Konto erstellen</h1>
+        <p class="muted intro-copy">Mit einem Konto bleiben deine Liste und dein Fortschritt gespeichert.</p>
+        <form id="register-form" class="auth-form">
+          <p class="form-alert" data-form-error role="alert" hidden></p>
+          <label>Benutzername<input name="username" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" autocomplete="username" /></label>
+          <p class="form-hint">3–30 Zeichen: Buchstaben, Zahlen und Unterstrich.</p>
+          <label>Passwort<input name="password" type="password" required minlength="8" autocomplete="new-password" /></label>
+          <p class="form-hint">Mindestens 8 Zeichen.</p>
+          <label>Passwort wiederholen<input name="password_confirmation" type="password" required minlength="8" autocomplete="new-password" /></label>
+          <button class="button button-primary button-wide" type="submit">Konto erstellen</button>
+          <p class="auth-switch">Schon registriert? <a href="/login">Anmelden</a></p>
+        </form>
+      </section>
     </main>
-
-</body>
-
+  </body>
 </html>

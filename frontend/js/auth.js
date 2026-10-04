@@ -1,12 +1,14 @@
-import { api } from "./apiClient.js";
-import { showMessage } from "./uiHelpers.js";
+import { callApi } from "./api-client.js";
+import { showError, showMessage } from "./dom.js";
 
-// Wird für login.html und register.html verwendet (page = "login" oder "register").
+const PAGE_AFTER_LOGIN = "/library";
+const PAGE_AFTER_REGISTRATION = "/login?created=1";
+
+// Used by the login and register pages (page is "login" or "register").
 export function initAuth(page) {
-  const form = document.querySelector("#" + page + "-form");
+  const form = document.querySelector(`#${page}-form`);
 
-  // Nach der Registrierung leitet register.html auf login.html?created=1 weiter.
-  if (page === "login" && window.location.search.includes("created")) {
+  if (page === "login" && new URLSearchParams(window.location.search).has("created")) {
     showMessage("[data-form-error]", "Konto erstellt. Du kannst dich jetzt anmelden.");
   }
 
@@ -16,19 +18,15 @@ export function initAuth(page) {
     const password = form.elements.password.value;
 
     if (page === "register" && password !== form.elements.password_confirmation.value) {
-      showMessage("[data-form-error]", "Die Passwörter stimmen nicht überein.", true);
+      showError("[data-form-error]", "Die Passwörter stimmen nicht überein.");
       return;
     }
 
     try {
-      await api("/auth/" + page, "POST", { username: username, password: password });
-      if (page === "login") {
-        window.location.href = "/library.html";
-      } else {
-        window.location.href = "/login.html?created=1";
-      }
+      await callApi(`/auth/${page}`, "POST", { username, password });
+      window.location.href = page === "login" ? PAGE_AFTER_LOGIN : PAGE_AFTER_REGISTRATION;
     } catch (error) {
-      showMessage("[data-form-error]", error.message, true);
+      showError("[data-form-error]", error.message);
     }
   });
 }

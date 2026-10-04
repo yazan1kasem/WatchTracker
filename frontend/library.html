@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
     <title>Meine Liste | WatchTrack</title>
     <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="/pageController.js"></script>
+    <script type="module" src="/js/main.js"></script>
   </head>
   <body data-page="library">
     <div id="topbar-slot"></div>
@@ -17,7 +17,7 @@
             <h1>Meine Liste</h1>
             <p id="library-summary" class="muted"></p>
           </div>
-          <a class="button button-primary" href="/add-media.html">+ Titel hinzufügen</a>
+          <a class="button button-primary" href="/library/add">+ Titel hinzufügen</a>
         </div>
         <form id="library-filters" class="filter-bar">
           <label class="filter-search">
@@ -67,7 +67,7 @@
             </div>
             <form class="edit-form" data-edit-form hidden>
               <div class="field-row movie-fields">
-                <label>Fortschritt in Minuten<input name="progress" type="number" min="0"/></label>
+                <label>Fortschritt in Minuten<input name="progress" type="number" min="0" /></label>
               </div>
               <div class="field-row tv-fields" hidden>
                 <label>Aktuelle Staffel<input name="current_season" type="number" min="1" /></label>
@@ -78,7 +78,7 @@
                 <label class="check-field"><input name="is_public" type="checkbox" /> Im Profil zeigen</label>
               </div>
               <label>Notiz<textarea name="notes" rows="3"></textarea></label>
-              <p class="form-hint">Notizen sind nur für dich sichtbar.</p>
+              <p class="form-hint">Bei öffentlichen Titeln erscheint die Notiz in deinem Profil.</p>
               <div class="edit-actions">
                 <p class="form-message" data-edit-message aria-live="polite"></p>
                 <button class="button button-secondary button-small" type="button" data-cancel>Abbrechen</button>

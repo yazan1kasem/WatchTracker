@@ -1,4 +1,4 @@
-![WatchTrack Logo](frontend/assets/Topbar_Logo.png)
+![WatchTrack Logo](frontend/assets/topbar-logo.png)
 # WatchTrack
 
 WatchTrack ist eine Web-App zum Verwalten und Tracken von Filmen und Serien. Titel lassen sich über die TMDB API suchen und einer persönlichen Bibliothek hinzufügen. Dort können Nutzer ihren Sehfortschritt pflegen, Bewertungen und Notizen hinterlegen und ausgewählte Einträge in einem öffentlichen Profil teilen. Ein Admin-Dashboard bietet zusätzliche Verwaltungsfunktionen für Nutzer und Medieneinträge.
@@ -32,7 +32,7 @@ WatchTrack ist eine Web-App zum Verwalten und Tracken von Filmen und Serien. Tit
    - `TMDB_API_KEY`: deinen TMDB API-Schlüssel
    - `JWT_SECRET`: einen eigenen, zufälligen geheimen Wert
 
-   Die übrigen Entwicklungswerte in der Beispieldatei reichen für einen lokalen Start aus. Optional kannst du `ADMIN_USERNAME` und `ADMIN_PASSWORD` setzen, um beim Initialisieren der Datenbank ein Administratorkonto anzulegen. Setze diese Werte vor dem nächsten Schritt.
+   Die übrigen Entwicklungswerte in der Beispieldatei reichen für einen lokalen Start aus. Optional kannst du `ADMIN_USERNAME` und `ADMIN_PASSWORD` setzen, um beim Initialisieren der Datenbank ein Administratorkonto anzulegen. Für dieses Konto gelten dieselben Regeln wie bei der Registrierung (Passwort mindestens 8 Zeichen), sonst bricht `npm run db:init` mit einer Fehlermeldung ab. Setze diese Werte vor dem nächsten Schritt.
 4. Datenbank und Schema initialisieren:
 
    ```sh

@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS tracked_media (
   UNIQUE (user_id, media_type, tmdb_id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_tracked_media_user_id
-  ON tracked_media (user_id);
+-- The UNIQUE constraint above already indexes lookups by user_id.
+DROP INDEX IF EXISTS idx_tracked_media_user_id;
 
 CREATE INDEX IF NOT EXISTS idx_tracked_media_public_profile
   ON tracked_media (user_id, is_public);

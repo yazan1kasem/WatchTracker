@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
     <title>Anmelden | WatchTrack</title>
     <link rel="stylesheet" href="/styles.css" />
-    <script type="module" src="/pageController.js"></script>
+    <script type="module" src="/js/main.js"></script>
   </head>
   <body data-page="login">
     <div id="topbar-slot"></div>
@@ -17,9 +17,9 @@
         <form id="login-form" class="auth-form">
           <p class="form-alert" data-form-error role="alert" hidden></p>
           <label>Benutzername<input name="username" required minlength="3" maxlength="30" autocomplete="username" /></label>
-          <label>Passwort<input name="password" type="password" autocomplete="current-password" /></label>
+          <label>Passwort<input name="password" type="password" required autocomplete="current-password" /></label>
           <button class="button button-primary button-wide" type="submit">Anmelden</button>
-          <p class="auth-switch">Noch kein Konto? <a href="/register.html">Registrieren</a></p>
+          <p class="auth-switch">Noch kein Konto? <a href="/register">Registrieren</a></p>
         </form>
       </section>
     </main>
