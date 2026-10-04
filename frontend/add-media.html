@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <title>Titel hinzufügen | WatchTrack</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/pageController.js"></script>
+  </head>
+  <body data-page="add-media">
+    <div id="topbar-slot"></div>
+    <main class="page-content">
+      <section class="page-section">
+        <a class="back-link" href="/library.html">← Meine Liste</a>
+        <div class="section-heading compact-heading">
+          <div>
+            <h1>Titel hinzufügen</h1>
+            <p class="muted">Titel, Poster, Jahr und Beschreibung kommen automatisch aus TMDB.</p>
+          </div>
+        </div>
+        <form id="title-search-form" class="title-search">
+          <label class="filter-search">
+            Film oder Serie
+            <input name="query" type="search" required placeholder="Titel suchen" />
+          </label>
+          <label>
+            Typ
+            <select name="type">
+              <option value="all">Alle</option>
+              <option value="movie">Filme</option>
+              <option value="tv">Serien</option>
+            </select>
+          </label>
+          <button class="button button-primary" type="submit">Suchen</button>
+        </form>
+        <p id="title-search-message" class="status-line" aria-live="polite"></p>
+        <div id="title-results" class="result-list"></div>
+        <template id="title-result-template">
+          <article class="result-row">
+            <div class="poster poster-result"><img data-poster alt="" loading="lazy" /></div>
+            <div class="result-copy">
+              <strong data-title></strong>
+              <span data-type-year></span>
+              <p data-overview></p>
+            </div>
+            <button class="button button-secondary button-small" type="button" data-add>
+              Hinzufügen
+            </button>
+          </article>
+        </template>
+      </section>
+    </main>
+    <footer class="site-footer">
+      Film- und Seriendaten von TMDB. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.
+    </footer>
+  </body>
+</html>

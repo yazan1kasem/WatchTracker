@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <title>Anmelden | WatchTrack</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/pageController.js"></script>
+  </head>
+  <body data-page="login">
+    <div id="topbar-slot"></div>
+    <main class="page-content">
+      <section class="auth-page">
+        <h1>Anmelden</h1>
+        <p class="muted intro-copy">Melde dich an, um deine Liste zu öffnen.</p>
+        <form id="login-form" class="auth-form">
+          <p class="form-alert" data-form-error role="alert" hidden></p>
+          <label>Benutzername<input name="username" required minlength="3" maxlength="30" autocomplete="username" /></label>
+          <label>Passwort<input name="password" type="password" autocomplete="current-password" /></label>
+          <button class="button button-primary button-wide" type="submit">Anmelden</button>
+          <p class="auth-switch">Noch kein Konto? <a href="/register.html">Registrieren</a></p>
+        </form>
+      </section>
+    </main>
+    <footer class="site-footer">Film- und Seriendaten von TMDB. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.</footer>
+  </body>
+</html>

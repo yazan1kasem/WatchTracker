@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <title>Meine Liste | WatchTrack</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/pageController.js"></script>
+  </head>
+  <body data-page="library">
+    <div id="topbar-slot"></div>
+    <main class="page-content">
+      <section class="page-section">
+        <div class="section-heading">
+          <div>
+            <h1>Meine Liste</h1>
+            <p id="library-summary" class="muted"></p>
+          </div>
+          <a class="button button-primary" href="/add-media.html">+ Titel hinzufügen</a>
+        </div>
+        <form id="library-filters" class="filter-bar">
+          <label class="filter-search">
+            In meiner Liste suchen
+            <input id="library-query" type="search" placeholder="Titel" />
+          </label>
+          <label>
+            Typ
+            <select id="library-type">
+              <option value="all">Alle</option>
+              <option value="movie">Filme</option>
+              <option value="tv">Serien</option>
+            </select>
+          </label>
+          <label>
+            Status
+            <select id="library-status">
+              <option value="all">Alle</option>
+              <option value="planned">Geplant</option>
+              <option value="active">Läuft</option>
+              <option value="completed">Abgeschlossen</option>
+            </select>
+          </label>
+        </form>
+        <p id="library-message" class="status-line" aria-live="polite"></p>
+        <div class="table-wrap">
+          <div class="media-list-heading">
+            <span>Titel</span><span>Fortschritt</span><span>Status</span><span>Bewertung</span><span></span>
+          </div>
+          <div id="library-list"></div>
+        </div>
+        <template id="media-template">
+          <article class="media-row">
+            <div class="media-title-cell">
+              <div class="poster poster-small"><img data-poster alt="" loading="lazy" /></div>
+              <div class="media-title-copy"><strong data-title></strong><span data-type-year></span></div>
+            </div>
+            <div class="progress-cell">
+              <span data-progress></span>
+              <span class="progress-track"><span data-progress-bar></span></span>
+            </div>
+            <div class="status-cell"><span class="status-tag" data-status></span></div>
+            <div class="rating-cell" data-rating></div>
+            <div class="row-actions">
+              <button class="button button-secondary button-small" type="button" data-edit>Bearbeiten</button>
+              <button class="text-button danger-link" type="button" data-remove>Entfernen</button>
+            </div>
+            <form class="edit-form" data-edit-form hidden>
+              <div class="field-row movie-fields">
+                <label>Fortschritt in Minuten<input name="progress" type="number" min="0"/></label>
+              </div>
+              <div class="field-row tv-fields" hidden>
+                <label>Aktuelle Staffel<input name="current_season" type="number" min="1" /></label>
+                <label>Zuletzt gesehene Episode<input name="current_episode" type="number" min="1" /></label>
+              </div>
+              <div class="field-row">
+                <label>Bewertung (1–10)<input name="rating" type="number" min="1" max="10" placeholder="Keine" /></label>
+                <label class="check-field"><input name="is_public" type="checkbox" /> Im Profil zeigen</label>
+              </div>
+              <label>Notiz<textarea name="notes" rows="3"></textarea></label>
+              <p class="form-hint">Notizen sind nur für dich sichtbar.</p>
+              <div class="edit-actions">
+                <p class="form-message" data-edit-message aria-live="polite"></p>
+                <button class="button button-secondary button-small" type="button" data-cancel>Abbrechen</button>
+                <button class="button button-primary button-small" type="submit">Speichern</button>
+              </div>
+            </form>
+          </article>
+        </template>
+      </section>
+    </main>
+    <footer class="site-footer">Film- und Seriendaten von TMDB. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.</footer>
+  </body>
+</html>

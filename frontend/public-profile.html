@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <title>Öffentliches Profil | WatchTrack</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/pageController.js"></script>
+  </head>
+  <body data-page="public-profile">
+    <div id="topbar-slot"></div>
+    <main class="page-content public-profile-page">
+      <a class="back-link" href="/profile-search.html">← Zurück zur Suche</a>
+      <div class="profile-heading">
+        <h1 id="profile-username">Öffentliches Profil</h1>
+        <p id="profile-summary" class="muted"></p>
+      </div>
+      <div class="segmented-control" aria-label="Medientyp filtern">
+        <button type="button" class="selected" data-profile-filter="all">Alle</button>
+        <button type="button" data-profile-filter="movie">Filme</button>
+        <button type="button" data-profile-filter="tv">Serien</button>
+      </div>
+      <p id="profile-message" class="status-line" aria-live="polite"></p>
+      <div class="table-wrap">
+        <div class="media-list-heading">
+          <span>Titel</span><span>Fortschritt</span><span>Status</span><span>Bewertung</span><span></span>
+        </div>
+        <div id="public-media-list"></div>
+      </div>
+      <template id="public-media-template">
+        <article class="media-row">
+          <div class="media-title-cell">
+            <div class="poster poster-small"><img data-poster alt="" loading="lazy" /></div>
+            <div class="media-title-copy"><strong data-title></strong><span data-type-year></span></div>
+          </div>
+          <div class="progress-cell">
+            <span data-progress></span>
+            <span class="progress-track"><span data-progress-bar></span></span>
+          </div>
+          <div class="status-cell"><span class="status-tag" data-status></span></div>
+          <div class="rating-cell" data-rating></div>
+          <div class="row-actions"></div>
+        </article>
+      </template>
+    </main>
+    <footer class="site-footer">
+      Film- und Seriendaten von TMDB. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.
+    </footer>
+  </body>
+</html>

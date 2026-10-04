@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile suchen | WatchTrack</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/pageController.js"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+</head>
+
+<body data-page="profile-search">
+    <div id="topbar-slot"></div>
+    <main class="page-content profile-search-page">
+        <section class="page-section">
+            <h1>Profile suchen</h1>
+            <p class="muted intro-copy">
+                Schau, was andere gerade schauen. Du siehst nur Titel, die eine Person in ihrem Profil freigegeben hat.
+            </p>
+            <form id="profile-search-form" class="profile-search-form">
+                <label>
+                    Benutzername
+                    <input name="query" type="search" required placeholder="Benutzername" />
+                </label>
+                <button class="button button-primary" type="submit">Suchen</button>
+            </form>
+            <p id="profile-search-message" class="status-line" aria-live="polite"></p>
+            <div id="profile-results" class="profile-results"></div>
+            <template id="profile-result-template">
+                <article class="profile-result">
+                    <div>
+                            <a data-profile-link><strong data-username></strong></a>
+                        <span data-title-count></span>
+                    </div>
+                        <a class="button button-secondary button-small" data-profile-link>Profil ansehen</a>
+                </article>
+            </template>
+        </section>
+    </main>
+    <footer class="site-footer">
+        Film- und Seriendaten von TMDB. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder
+        zertifiziert.
+    </footer>
+</body>
+
+</html>

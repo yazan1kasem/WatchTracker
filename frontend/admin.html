@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <title>Nutzerkonten | WatchTrack</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/pageController.js"></script>
+  </head>
+  <body data-page="admin">
+    <div id="topbar-slot"></div>
+    <main class="page-content">
+      <p id="admin-access-message" class="status-line" aria-live="polite" hidden></p>
+      <section class="page-section admin-page">
+        <div class="section-heading compact-heading">
+          <div>
+            <h1>Admin-Dashboard</h1>
+            <p class="muted">Nutzerkonten und Medieneinträge systemweit verwalten.</p>
+          </div>
+        </div>
+        <section class="admin-section" aria-labelledby="admin-users-heading">
+          <div class="section-heading compact-heading">
+            <div>
+              <h2 id="admin-users-heading">Nutzerkonten</h2>
+              <p class="muted">Konten anlegen, bearbeiten, Rollen vergeben oder löschen.</p>
+            </div>
+          </div>
+          <form id="admin-user-create" class="admin-create-form">
+            <label>Benutzername<input name="username" required minlength="3" maxlength="30" /></label>
+            <label>Startpasswort<input name="password" type="password" required minlength="8" autocomplete="new-password" /></label>
+            <label>Rolle
+              <select name="role">
+                <option value="user">Nutzer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+            <button class="button button-primary" type="submit">Nutzer anlegen</button>
+          </form>
+          <p id="admin-user-create-message" class="status-line" aria-live="polite"></p>
+        <form id="admin-filter" class="admin-filter">
+          <label>
+            Benutzername
+            <input id="admin-query" type="search" placeholder="z. B. lena" />
+          </label>
+          <label>
+            Rolle
+            <select id="admin-role">
+              <option value="all">Alle</option>
+              <option value="user">Nutzer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </label>
+          <button class="button button-primary" type="submit">Suchen</button>
+        </form>
+        <p id="admin-user-message" class="status-line" aria-live="polite"></p>
+        <p id="admin-message" class="status-line" aria-live="polite"></p>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Nutzer</th><th>Rolle</th><th>Aktionen</th></tr>
+            </thead>
+            <tbody id="admin-users"></tbody>
+          </table>
+        </div>
+        <template id="admin-user-template">
+          <tr>
+            <td><strong data-username></strong><span class="admin-id" data-user-id></span></td>
+            <td data-role></td>
+            <td class="row-actions">
+              <button class="button button-secondary button-small" type="button" data-edit>Bearbeiten</button>
+              <button class="text-button danger-link" type="button" data-delete>Löschen</button>
+            </td>
+          </tr>
+        </template>
+        </section>
+
+        <section class="admin-section" aria-labelledby="admin-media-heading">
+          <div class="section-heading compact-heading">
+            <div>
+              <h2 id="admin-media-heading">Medieneinträge</h2>
+              <p class="muted">Einträge für beliebige Nutzer anlegen und systemweit bearbeiten.</p>
+            </div>
+          </div>
+          <form id="admin-media-create" class="admin-media-create">
+            <label>Nutzer
+              <select name="user_id" id="admin-media-user" required></select>
+            </label>
+            <label>TMDB-ID<input name="tmdb_id" type="number" min="1" step="1" required /></label>
+            <label>Medientyp
+              <select name="media_type">
+                <option value="movie">Film</option>
+                <option value="tv">Serie</option>
+              </select>
+            </label>
+            <button class="button button-primary" type="submit">Eintrag anlegen</button>
+          </form>
+          <p id="admin-media-create-message" class="status-line" aria-live="polite"></p>
+          <form id="admin-media-filter" class="admin-filter">
+            <label>Suche nach Titel oder Nutzer
+              <input id="admin-media-query" type="search" />
+            </label>
+            <label>Medientyp
+              <select id="admin-media-type">
+                <option value="all">Alle</option>
+                <option value="movie">Film</option>
+                <option value="tv">Serie</option>
+              </select>
+            </label>
+            <button class="button button-secondary" type="submit">Filter zurücksetzen</button>
+          </form>
+          <p id="admin-media-message" class="status-line" aria-live="polite"></p>
+          <div class="admin-table-wrap">
+            <table class="admin-table admin-media-table">
+              <thead>
+                <tr><th>Nutzer</th><th>Titel</th><th>Fortschritt</th><th>Bewertung</th><th>Profil</th><th>Aktionen</th></tr>
+              </thead>
+              <tbody id="admin-media"></tbody>
+            </table>
+          </div>
+          <template id="admin-media-template">
+            <tr>
+              <td data-owner></td>
+              <td><strong data-title></strong><span class="admin-id" data-media-type></span></td>
+              <td data-progress></td>
+              <td data-rating></td>
+              <td data-visibility></td>
+              <td class="row-actions">
+                <button class="button button-secondary button-small" type="button" data-edit>Bearbeiten</button>
+                <button class="text-button danger-link" type="button" data-delete>Löschen</button>
+              </td>
+            </tr>
+          </template>
+        </section>
+      </section>
+    </main>
+    <dialog id="admin-user-dialog" class="admin-dialog">
+      <form id="admin-user-edit" class="admin-dialog-form">
+        <h2>Nutzer bearbeiten</h2>
+        <label>Benutzername<input name="username" required minlength="3" maxlength="30" /></label>
+        <label>Neues Passwort <span class="muted">(leer lassen, um es beizubehalten)</span>
+          <input name="password" type="password" minlength="8" autocomplete="new-password" />
+        </label>
+        <label>Rolle
+          <select name="role">
+            <option value="user">Nutzer</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+        <p id="admin-user-edit-message" class="form-message" aria-live="polite"></p>
+        <div class="edit-actions">
+          <button class="button button-secondary button-small" type="button" data-close-user>Abbrechen</button>
+          <button class="button button-primary button-small" type="submit">Speichern</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="admin-media-dialog" class="admin-dialog">
+      <form id="admin-media-edit" class="admin-dialog-form">
+        <h2>Medieneintrag bearbeiten</h2>
+        <p id="admin-media-title" class="muted"></p>
+        <label>Nutzer
+          <select name="user_id" id="admin-edit-media-user" required></select>
+        </label>
+        <div class="field-row movie-fields">
+          <label>Fortschritt in Minuten<input name="progress" type="number" min="0" /></label>
+        </div>
+        <div class="field-row tv-fields" hidden>
+          <label>Aktuelle Staffel<input name="current_season" type="number" min="1" /></label>
+          <label>Zuletzt gesehene Episode<input name="current_episode" type="number" min="1" /></label>
+        </div>
+        <div class="field-row">
+          <label>Bewertung (1–10)<input name="rating" type="number" min="1" max="10" /></label>
+          <label class="check-field"><input name="is_public" type="checkbox" /> Im Profil zeigen</label>
+        </div>
+        <label>Notiz<textarea name="notes" rows="3"></textarea></label>
+        <p id="admin-media-edit-message" class="form-message" aria-live="polite"></p>
+        <div class="edit-actions">
+          <button class="button button-secondary button-small" type="button" data-close-media>Abbrechen</button>
+          <button class="button button-primary button-small" type="submit">Speichern</button>
+        </div>
+      </form>
+    </dialog>
+    <footer class="site-footer">
+      Film- und Seriendaten von TMDB. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.
+    </footer>
+  </body>
+</html>

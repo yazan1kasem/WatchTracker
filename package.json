@@ -1,0 +1,21 @@
+{
+  "name": "watchtrack",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WatchTrack media and progress tracker scaffold",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "node node_modules/nodemon/bin/nodemon.js backend/server.js",
+    "start": "node backend/server.js",
+    "db:init": "node backend/db/init.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "sql.js": "^1.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
