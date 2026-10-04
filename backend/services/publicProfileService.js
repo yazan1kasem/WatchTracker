@@ -44,7 +44,7 @@ function findPublicProfile(database, username) {
     const mediaStatement = database.prepare(`
       SELECT id, tmdb_id, media_type, title, poster_path, release_date,
              total_runtime, total_episodes, current_season, current_episode,
-             progress, rating, is_public
+              progress, rating, notes, is_public
       FROM tracked_media
       WHERE user_id = ? AND is_public = 1
       ORDER BY id DESC

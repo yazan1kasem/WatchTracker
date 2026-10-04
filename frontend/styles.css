@@ -150,6 +150,7 @@ label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; }
 .media-title-copy { display: grid; min-width: 0; gap: 2px; }
 .media-title-copy strong, .result-copy strong { overflow: hidden; text-overflow: ellipsis; }
 .media-title-copy span, .result-copy > span { color: var(--muted); font-size: 11px; }
+.media-title-copy [data-notes] { color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
 .poster { display: grid; flex: 0 0 auto; place-items: center; overflow: hidden; background: #e4e4e2; }
 .poster img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .poster-small { width: 40px; height: 54px; }
@@ -205,8 +206,12 @@ label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; }
 	gap: 12px;
 	margin: 20px 0 8px;
 }
-.admin-media-create { grid-template-columns: minmax(180px, 1.2fr) minmax(130px, .7fr) 130px auto; }
+.admin-media-create { grid-template-columns: minmax(180px, 1.1fr) minmax(120px, .7fr) minmax(220px, 1.5fr) auto; }
 .admin-create-form .button, .admin-media-create .button { min-height: 38px; }
+.admin-media-suggestions { grid-column: 1 / -1; display: grid; max-height: 240px; overflow-y: auto; border-top: 1px solid var(--line); }
+.admin-media-suggestions[hidden] { display: none; }
+.admin-media-suggestion { min-height: 38px; border: 0; border-bottom: 1px solid var(--line); padding: 8px 10px; color: var(--ink); background: transparent; font: inherit; text-align: left; cursor: pointer; }
+.admin-media-suggestion:hover, .admin-media-suggestion:focus-visible { background: var(--soft); }
 .admin-dialog {
 	width: min(560px, calc(100% - 32px));
 	max-height: calc(100% - 32px);

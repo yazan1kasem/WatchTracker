@@ -15,6 +15,11 @@ export async function initPublicProfile() {
     for (const entry of visibleEntries) {
       const row = cloneTemplate("#public-media-template");
       fillMediaRow(row, entry);
+      const notes = row.querySelector("[data-notes]");
+      if (entry.notes?.trim()) {
+        notes.textContent = entry.notes;
+        notes.hidden = false;
+      }
       list.append(row);
     }
 

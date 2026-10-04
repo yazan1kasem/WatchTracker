@@ -9,6 +9,9 @@ export async function initAdmin(currentUser) {
   const userEditDialog = document.querySelector("#admin-user-dialog");
   const userEditForm = document.querySelector("#admin-user-edit");
   const mediaCreateForm = document.querySelector("#admin-media-create");
+  const mediaUsernameInput = document.querySelector("#admin-media-username");
+  const mediaTitleInput = document.querySelector("#admin-media-title-search");
+  const mediaSuggestions = document.querySelector("#admin-media-suggestions");
   const mediaEditDialog = document.querySelector("#admin-media-dialog");
   const mediaEditForm = document.querySelector("#admin-media-edit");
   const mediaFilterForm = document.querySelector("#admin-media-filter");
@@ -16,13 +19,16 @@ export async function initAdmin(currentUser) {
   let entries = [];
   let editingUser = null;
   let editingEntry = null;
+  let selectedMedia = null;
+  let mediaSearchTimer;
+  let mediaSearchVersion = 0;
 
   async function loadUsers() {
     try {
       const data = await api("/admin/users");
       accounts = data.users;
       renderUsers();
-      fillUserSelect(document.querySelector("#admin-media-user"));
+      fillUserSuggestions();
       fillUserSelect(
         document.querySelector("#admin-edit-media-user"),
         editingEntry?.user_id
@@ -60,6 +66,17 @@ export async function initAdmin(currentUser) {
     if (selectedId !== undefined) select.value = String(selectedId);
     if (select === document.querySelector("#admin-edit-media-user") && editingEntry) {
       select.value = String(editingEntry.user_id);
+    }
+  }
+
+  function fillUserSuggestions() {
+    const suggestions = document.querySelector("#admin-media-user-options");
+    suggestions.replaceChildren();
+
+    for (const account of accounts) {
+      const option = document.createElement("option");
+      option.value = account.username;
+      suggestions.append(option);
     }
   }
 
@@ -194,18 +211,96 @@ export async function initAdmin(currentUser) {
 
   async function createMedia(event) {
     event.preventDefault();
-    const body = Object.fromEntries(new FormData(mediaCreateForm));
-    body.user_id = Number(body.user_id);
-    body.tmdb_id = Number(body.tmdb_id);
+    const username = mediaUsernameInput.value.trim().toLowerCase();
+    const account = accounts.find((candidate) => candidate.username.toLowerCase() === username);
 
+    if (!account) {
+      showMessage("#admin-media-create-message", "Bitte einen vorhandenen Nutzernamen auswählen.", true);
+      return;
+    }
+
+    if (
+      !selectedMedia ||
+      selectedMedia.title !== mediaTitleInput.value.trim() ||
+      selectedMedia.media_type !== mediaCreateForm.elements.media_type.value
+    ) {
+      showMessage("#admin-media-create-message", "Bitte einen TMDB-Treffervorschlag auswählen.", true);
+      return;
+    }
+
+    const submitButton = mediaCreateForm.querySelector('[type="submit"]');
+    submitButton.disabled = true;
     try {
-      const data = await api("/admin/tracked-media", "POST", body);
-      mediaCreateForm.reset();
+      const data = await api("/admin/tracked-media", "POST", {
+        user_id: account.id,
+        tmdb_id: selectedMedia.id,
+        media_type: selectedMedia.media_type
+      });
+      mediaTitleInput.value = "";
+      mediaSuggestions.replaceChildren();
+      mediaSuggestions.hidden = true;
+      selectedMedia = null;
       showMessage("#admin-media-create-message", `${data.entry.title} wurde angelegt.`);
       await loadMedia();
     } catch (error) {
       showMessage("#admin-media-create-message", error.message, true);
+    } finally {
+      submitButton.disabled = false;
     }
+  }
+
+  function scheduleMediaSearch() {
+    selectedMedia = null;
+    mediaSuggestions.replaceChildren();
+    mediaSuggestions.hidden = true;
+    clearTimeout(mediaSearchTimer);
+
+    const query = mediaTitleInput.value.trim();
+    const searchVersion = ++mediaSearchVersion;
+    if (query.length < 2) {
+      showMessage("#admin-media-create-message", "Mindestens zwei Zeichen für die Titelsuche eingeben.");
+      return;
+    }
+
+    showMessage("#admin-media-create-message", "Suche in TMDB ...");
+    mediaSearchTimer = setTimeout(async () => {
+      const mediaType = mediaCreateForm.elements.media_type.value;
+
+      try {
+        const data = await api(
+          `/tmdb/search?query=${encodeURIComponent(query)}&type=${mediaType}`
+        );
+        if (searchVersion !== mediaSearchVersion) return;
+
+        for (const title of data.results) {
+          const button = document.createElement("button");
+          const typeLabel = title.media_type === "tv" ? "Serie" : "Film";
+          const year = title.release_date ? title.release_date.slice(0, 4) : "Jahr unbekannt";
+          button.type = "button";
+          button.className = "admin-media-suggestion";
+          button.textContent = `${title.title} · ${typeLabel} · ${year}`;
+          button.addEventListener("click", () => {
+            selectedMedia = title;
+            mediaTitleInput.value = title.title;
+            mediaSuggestions.replaceChildren();
+            mediaSuggestions.hidden = true;
+            showMessage("#admin-media-create-message", `${title.title} ausgewählt.`);
+            mediaTitleInput.focus();
+          });
+          mediaSuggestions.append(button);
+        }
+
+        mediaSuggestions.hidden = data.results.length === 0;
+        showMessage(
+          "#admin-media-create-message",
+          data.results.length ? `${data.results.length} TMDB-Treffer gefunden.` : "Keine Treffer gefunden."
+        );
+      } catch (error) {
+        if (searchVersion === mediaSearchVersion) {
+          showMessage("#admin-media-create-message", error.message, true);
+        }
+      }
+    }, 250);
   }
 
   function openMediaDialog(entry) {
@@ -272,6 +367,10 @@ export async function initAdmin(currentUser) {
   userCreateForm.addEventListener("submit", createUser);
   userEditForm.addEventListener("submit", saveUser);
   mediaCreateForm.addEventListener("submit", createMedia);
+  mediaTitleInput.addEventListener("input", scheduleMediaSearch);
+  mediaCreateForm.elements.media_type.addEventListener("change", () => {
+    if (mediaTitleInput.value.trim()) scheduleMediaSearch();
+  });
   mediaEditForm.addEventListener("submit", saveMedia);
   mediaFilterForm.addEventListener("input", renderMedia);
   mediaFilterForm.addEventListener("submit", (event) => {

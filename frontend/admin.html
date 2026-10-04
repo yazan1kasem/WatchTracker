@@ -83,17 +83,21 @@
             </div>
           </div>
           <form id="admin-media-create" class="admin-media-create">
-            <label>Nutzer
-              <select name="user_id" id="admin-media-user" required></select>
+            <label>Nutzername
+              <input id="admin-media-username" name="username" type="search" list="admin-media-user-options" autocomplete="off" required placeholder="Nutzer suchen" />
+              <datalist id="admin-media-user-options"></datalist>
             </label>
-            <label>TMDB-ID<input name="tmdb_id" type="number" min="1" step="1" required /></label>
             <label>Medientyp
-              <select name="media_type">
+              <select name="media_type" id="admin-media-type-create">
                 <option value="movie">Film</option>
                 <option value="tv">Serie</option>
               </select>
             </label>
+            <label>Titel suchen
+              <input id="admin-media-title-search" name="title" type="search" autocomplete="off" required placeholder="Film- oder Serientitel" />
+            </label>
             <button class="button button-primary" type="submit">Eintrag anlegen</button>
+            <div id="admin-media-suggestions" class="admin-media-suggestions" aria-label="TMDB-Treffervorschläge" hidden></div>
           </form>
           <p id="admin-media-create-message" class="status-line" aria-live="polite"></p>
           <form id="admin-media-filter" class="admin-filter">
@@ -180,8 +184,6 @@
         </div>
       </form>
     </dialog>
-    <footer class="site-footer">
-      Film- und Seriendaten von TMDB. Dieses Produkt nutzt die TMDB-API, ist aber nicht von TMDB unterstützt oder zertifiziert.
-    </footer>
+
   </body>
 </html>
